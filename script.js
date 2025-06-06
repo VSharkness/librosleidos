@@ -1,9 +1,19 @@
+// Referencias a elementos del DOM principales
 const form = document.getElementById('book-form');
 const bookList = document.getElementById('book-list');
 
+// Variables de estado inicial
 let books = JSON.parse(localStorage.getItem('books')) || [];
 let editingIndex = null;
+let currentSort = 'date-asc';
 
+// Manejador de cambio de orden en el selector
+document.getElementById('sort-select').addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderBooks();
+});
+
+// Envío del formulario: agregar o modificar libro
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -39,16 +49,19 @@ form.addEventListener('submit', (e) => {
   document.querySelector('#book-form button[type="submit"]').textContent = 'Agregar';
 });
 
+// Guardar lista de libros en localStorage
 function saveBooks() {
   localStorage.setItem('books', JSON.stringify(books));
 }
 
+// Eliminar un libro por índice
 function deleteBook(index) {
   books.splice(index, 1);
   saveBooks();
   renderBooks();
 }
 
+// Editar un libro cargando sus datos en el formulario
 function editBook(index) {
   const book = books[index];
   document.getElementById('title').value = book.title;
@@ -57,8 +70,36 @@ function editBook(index) {
   document.getElementById('totalPages').value = book.totalPages;
   editingIndex = index;
   document.querySelector('#book-form button[type="submit"]').textContent = 'Modificar';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Ordenar libros según criterio y dirección seleccionados
+function sortBooks(list) {
+  const sorted = [...list];
+  const [criteria, direction] = currentSort.split('-');
+
+  const compare = (a, b, keyFn) => {
+    const valA = keyFn(a);
+    const valB = keyFn(b);
+    if (valA < valB) return direction === 'asc' ? -1 : 1;
+    if (valA > valB) return direction === 'asc' ? 1 : -1;
+    return 0;
+  };
+
+  if (criteria === 'title') {
+    sorted.sort((a, b) => compare(a, b, x => x.title.toLowerCase()));
+  } else if (criteria === 'author') {
+    sorted.sort((a, b) => compare(a, b, x => x.author.toLowerCase()));
+  } else if (criteria === 'pages') {
+    sorted.sort((a, b) => compare(a, b, x => x.totalPages));
+  } else if (criteria === 'date') {
+    sorted.sort((a, b) => compare(a, b, x => new Date(x.finishedDate)));
+  }
+
+  return sorted;
+}
+
+// Mostrar la lista de libros en pantalla
 function renderBooks() {
   bookList.innerHTML = '';
 
@@ -71,21 +112,19 @@ function renderBooks() {
     .map((book, i) => ({ ...book, originalIndex: i }))
     .filter(b => !b.finished || !b.finishedDate);
 
-  const sortedBooks = finishedBooks.concat(unfinishedBooks);
+  const sortedBooks = sortBooks(finishedBooks).concat(unfinishedBooks);
 
   sortedBooks.forEach((book) => {
     const div = document.createElement('div');
     div.className = 'book';
 
     const progress = Math.floor((book.currentPage / book.totalPages) * 100);
-
     let titleStyle = book.finished ? 'color: var(--color-finished); cursor: pointer;' : 'cursor: pointer;';
 
     let content = `
       <div class="book-header">
         <div class="book-info">
           <div class="title-icon-wrapper">
-            <!-- Icono eliminado -->
             <h3 data-index="${book.originalIndex}" style="${titleStyle}">${book.title.toUpperCase()}</h3>
           </div>
           <p class="saga">${book.saga || 'Ninguna'}</p>
@@ -103,11 +142,11 @@ function renderBooks() {
 
     if (book.finished) {
       content += `
-    <p class="finished">
-      <span class="finished-label">Completado el:</span>
-      <input type="date" data-index="${book.originalIndex}" class="date-input" value="${book.finishedDate}">
-    </p>
-  `;
+        <p class="finished">
+          <span class="finished-label">Completado el:</span>
+          <input type="date" data-index="${book.originalIndex}" class="date-input" value="${book.finishedDate}">
+        </p>
+      `;
     } else {
       content += `
         <div class="progress-container">
@@ -136,23 +175,21 @@ function renderBooks() {
   equalizeTitleHeights();
 }
 
+// Asignar eventos a elementos dinámicos: títulos, inputs, botones y portadas
 function attachEventListeners() {
-  // Toggle terminado al hacer click en el título
   document.querySelectorAll('h3[data-index]').forEach(title => {
-title.addEventListener('click', (e) => {
-  const index = e.target.dataset.index;
-  const book = books[index];
-  book.finished = !book.finished;
-  if (book.finished && !book.finishedDate) {
-    book.finishedDate = new Date().toISOString().split('T')[0];
-  }
-  saveBooks();
-  renderBooks();
-});
-
+    title.addEventListener('click', (e) => {
+      const index = e.target.dataset.index;
+      const book = books[index];
+      book.finished = !book.finished;
+      if (book.finished && !book.finishedDate) {
+        book.finishedDate = new Date().toISOString().split('T')[0];
+      }
+      saveBooks();
+      renderBooks();
+    });
   });
 
-  // Inputs página actual
   document.querySelectorAll('.page-input').forEach(input => {
     input.addEventListener('input', (e) => {
       const index = parseInt(e.target.dataset.index);
@@ -185,7 +222,6 @@ title.addEventListener('click', (e) => {
     });
   });
 
-  // Input fecha terminado
   document.querySelectorAll('.date-input').forEach(input => {
     input.addEventListener('change', (e) => {
       const index = e.target.dataset.index;
@@ -195,7 +231,6 @@ title.addEventListener('click', (e) => {
     });
   });
 
-  // Botones eliminar
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const index = e.target.dataset.index;
@@ -203,7 +238,6 @@ title.addEventListener('click', (e) => {
     });
   });
 
-  // Botones editar
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const index = e.target.dataset.index;
@@ -211,10 +245,10 @@ title.addEventListener('click', (e) => {
     });
   });
 
-  // Portadas
   attachCoverListeners();
 }
 
+// Exportar la lista de libros a un archivo JSON
 function downloadBooks() {
   const blob = new Blob([JSON.stringify(books, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -225,6 +259,7 @@ function downloadBooks() {
   URL.revokeObjectURL(url);
 }
 
+// Importar libros desde archivo JSON
 function uploadBooks(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -246,6 +281,7 @@ function uploadBooks(event) {
   reader.readAsText(file);
 }
 
+// Manejador de clic en la portada para seleccionar imagen
 function handleCoverClick(e) {
   const container = e.currentTarget;
   const index = container.dataset.index;
@@ -270,36 +306,36 @@ function handleCoverClick(e) {
   input.click();
 }
 
+// Asignar evento de clic a todas las portadas de libros
 function attachCoverListeners() {
   document.querySelectorAll('.cover-container').forEach(container => {
     container.addEventListener('click', handleCoverClick);
   });
 }
+
+// Igualar visualmente la altura de todos los títulos
 function equalizeTitleHeights() {
   const titles = document.querySelectorAll('.book-info h3');
   let maxHeight = 0;
 
-  // Resetear altura para medir bien
   titles.forEach(title => {
     title.style.height = 'auto';
   });
 
-  // Calcular altura máxima
   titles.forEach(title => {
     if (title.offsetHeight > maxHeight) {
       maxHeight = title.offsetHeight;
     }
   });
 
-  // Asignar altura máxima a todos
   titles.forEach(title => {
     title.style.height = maxHeight + 'px';
   });
 }
 
-
-
+// Eventos de exportación e importación de libros
 document.getElementById('export-btn').addEventListener('click', downloadBooks);
 document.getElementById('import-input').addEventListener('change', uploadBooks);
 
+// Mostrar los libros al cargar la página
 renderBooks();
