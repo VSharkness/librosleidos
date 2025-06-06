@@ -1,3 +1,6 @@
+/* ============================== */
+/* VARIABLES (Temas y Colores)   */
+/* ============================== */
 :root {
   --color-bg-dark: #1a1a1f;
   --color-bg-card: #2a2a33;
@@ -30,6 +33,9 @@
   --color-pages: #a99de2;
 }
 
+/* ============================== */
+/* BASE / BODY / TIPOGRAFÍA      */
+/* ============================== */
 body {
   font-family: Arial, sans-serif;
   background-color: var(--color-bg-dark);
@@ -39,10 +45,13 @@ body {
   font-size: clamp(0.9rem, 1vw + 0.5rem, 1.1rem);
 }
 
+/* ============================== */
+/* ESTRUCTURA PRINCIPAL          */
+/* ============================== */
 .container {
   max-width: 1200px;
   width: 95%;
-  min-width: calc(14rem + 1rem * 2); /* ancho libro mínimo + padding horizontal */
+  min-width: calc(14rem + 1rem * 2);
   margin: 2rem auto 0;
   padding: 0 1rem 2rem;
   background-color: var(--color-bg-card);
@@ -55,10 +64,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 6rem; /* o el que elijas */
-  padding-top: 0; /* sin padding arriba para que el centrado sea exacto */
+  height: 6rem;
+  padding-top: 0;
 }
-
 
 h1 {
   margin: 1rem 0;
@@ -69,17 +77,11 @@ h1 {
   text-shadow: none;
 }
 
-
+/* ============================== */
+/* FORMULARIO DE ENTRADA         */
+/* ============================== */
 .form-grid {
   margin: 0;
-}
-
-
-
-
-
-
-.form-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -138,6 +140,9 @@ h1 {
   background-color: var(--color-primary-hover);
 }
 
+/* ============================== */
+/* BOTONES DE ICONOS             */
+/* ============================== */
 .icon-buttons {
   display: flex;
   gap: 1rem;
@@ -165,6 +170,9 @@ h1 {
   cursor: pointer;
 }
 
+/* ============================== */
+/* LISTADO DE LIBROS             */
+/* ============================== */
 #book-list {
   display: grid;
   gap: 1rem;
@@ -179,9 +187,9 @@ h1 {
   }
 }
 
-
-
-
+/* ============================== */
+/* TARJETA DE LIBRO              */
+/* ============================== */
 .book {
   background-color: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -200,48 +208,31 @@ h1 {
 }
 
 .book-info {
-  flex: 1 1 auto; /* ocupa todo el espacio excepto lo que ocupen los botones */
-  min-width: 0;   /* para que no crezca más que el contenedor */
-}
-
-.book-actions {
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
-  gap: 0.25rem;
-  flex-shrink: 0; /* para que no reduzca su tamaño */
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
-
-.edit-btn,
-.delete-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
+.book-info > * {
+  margin: 0;
+  line-height: 1.1;
 }
 
-.finished-label {
-  color: var(--color-finished-label);
-  font-weight: bold;
-  margin-right: 0.25rem;
+.book-info p,
+.book-info h3 {
+  margin: 0;
+  line-height: 1.2;
 }
 
-
-
-.delete-btn {
-  color: var(--color-delete);
-}
-
-.delete-btn:hover {
-  color: var(--color-delete-hover);
-}
-
-.edit-btn {
-  color: var(--color-edit);
-}
-
-.edit-btn:hover {
-  color: var(--color-edit-hover);
+.book-info h3 {
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.2;
+  height: auto;
 }
 
 .book p {
@@ -254,10 +245,145 @@ h1 {
   color: var(--color-text-secondary);
 }
 
-.book input[type='number'],
+.book .saga {
+  color: var(--color-saga);
+}
+
+.book .author {
+  color: var(--color-author);
+  font-style: italic;
+}
+
+.book .pages {
+  color: var(--color-pages);
+}
+
+/* ============================== */
+/* ACCIONES (Editar/Borrar)      */
+/* ============================== */
+.book-actions {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.edit-btn {
+  color: var(--color-edit);
+}
+
+.edit-btn:hover {
+  color: var(--color-edit-hover);
+}
+
+.delete-btn {
+  color: var(--color-delete);
+}
+
+.delete-btn:hover {
+  color: var(--color-delete-hover);
+}
+
+.finished-label {
+  color: var(--color-finished-label);
+  font-weight: bold;
+  margin-right: 0.25rem;
+}
+
+/* ============================== */
+/* INPUT DE PÁGINAS Y FECHAS     */
+/* ============================== */
+.page-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.page-input {
+  width: 4.5ch;
+  text-align: right;
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.page-input::-webkit-outer-spin-button,
+.page-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .book input[type='date'] {
-  width: 100%;
-  margin-top: 0.25rem;
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+  width: auto;
+  min-width: 140px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.book input[type='date']:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 6px var(--color-primary);
+}
+
+.book input[type='date']::-moz-focus-inner {
+  border: 0;
+}
+
+.book input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(70%) sepia(30%) saturate(200%) hue-rotate(190deg);
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.book input[type='date']:hover::-webkit-calendar-picker-indicator {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+/* ============================== */
+/* BARRA DE PROGRESO             */
+/* ============================== */
+.progress-container,
+.finished {
+  height: 56px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.progress-container > .page-row {
+  margin-top: 0;
+}
+
+.progress-container > .progress-bar {
+  margin-top: 0;
+  flex-shrink: 0;
 }
 
 .progress-bar {
@@ -282,138 +408,19 @@ h1 {
 }
 
 .finished {
-
   color: var(--color-finished);
   font-weight: bold;
   font-size: 0.85rem;
   margin-top: 0.5rem;
 }
 
-.progress-container,
-.finished {
-  height: 56px; /* Ajusta la altura para que cubra page-row + progress-bar */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px; /* espacio entre .page-row y .progress-bar */
-}
-
-.progress-container > .page-row {
-  margin-top: 0;
-}
-
-.progress-container > .progress-bar {
-  margin-top: 0;
-  flex-shrink: 0;
-}
-
-.book .saga {
-  color: var(--color-saga);
-}
-
-.book .author {
-  color: var(--color-author);
-  font-style: italic;
-}
-
-.book .pages {
-  color: var(--color-pages);
-}
-
-.book-info h3 {
-  font-size: 1rem;
-  margin: 0;
-  display: flex;
-  justify-content: center; /* centrar horizontal */
-  align-items: center;     /* centrar vertical */
-  line-height: 1.2;        /* ajusta si quieres */
-  height: auto;            /* elimina si lo tienes fijo aquí */
-}
-
-.page-input {
-  width: 4.5ch;
-  text-align: right;
-  background-color: var(--color-bg-input);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-light);
-  border-radius: 4px;
-  padding: 0.25rem;
-  margin-left: 0.5rem;
-
-  appearance: textfield;
-  -moz-appearance: textfield;
-  -webkit-appearance: none;
-}
-
-.page-input::-webkit-outer-spin-button,
-.page-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.page-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-@media (min-width: 2000px) {
-  body {
-    font-size: 1.2rem;
-  }
-
-  .container {
-    max-width: 75rem;
-  }
-
-
-}
-
-.book-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.book-info > * {
-  margin: 0;
-  line-height: 1.1;
-}
-
-.book-info p,
-.book-info h3 {
-  margin: 0;
-  line-height: 1.2;
-}
-
-.pages-with-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.pages-with-actions .pages {
-  margin: 0;
-  line-height: 1.2;
-  flex: 1;
-  white-space: nowrap;
-}
-
-.book-actions {
-  display: flex;
-  gap: 0.25rem;
-  justify-content: flex-end;
-  min-width: 0; /* para evitar restricciones inesperadas */
-}
-
-
+/* ============================== */
+/* PORTADA DEL LIBRO             */
+/* ============================== */
 .cover-container {
   margin-top: 0.8rem;
   width: 100%;
-  aspect-ratio: 3 / 4.5; /* forma de libro */
+  aspect-ratio: 3 / 4.5;
   border-radius: 6px;
   background-color: #444;
   box-shadow: inset -8px 0 12px rgba(0,0,0,0.5);
@@ -442,44 +449,77 @@ h1 {
   user-select: none;
 }
 
-.title-icon-wrapper {
-  display: block; /* o inline-block */
-  height: auto; /* que no tenga altura fija */
-  overflow: visible; /* para que no corte */
-}
-
-.book input[type='date'] {
-  background-color: var(--color-bg-input);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-light);
-  border-radius: 4px;
-  padding: 0.3rem 0.5rem;
+/* ============================== */
+/* SELECTOR DE ORDEN             */
+/* ============================== */
+.sort-select {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
   font-size: 1rem;
-  width: auto; /* para que no ocupe todo el ancho */
-  min-width: 140px; /* ancho razonable para mostrar fecha */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-sizing: border-box;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='7' viewBox='0 0 10 7' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.65rem auto;
+  padding-right: 2rem;
 }
 
-.book input[type='date']:focus {
+.sort-select:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.sort-select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 6px var(--color-primary);
+  box-shadow: 0 0 5px var(--color-accent);
+}
+
+.sort-select option {
   background-color: var(--color-bg-input);
   color: var(--color-text-primary);
 }
 
-.book input[type='date']::-moz-focus-inner {
-  border: 0;
+/* ============================== */
+/* TÍTULO CON ÍCONO              */
+/* ============================== */
+.title-icon-wrapper {
+  display: block;
+  height: auto;
+  overflow: visible;
 }
 
-.book input[type='date']::-webkit-calendar-picker-indicator {
-  filter: invert(70%) sepia(30%) saturate(200%) hue-rotate(190deg);
-  cursor: pointer;
-  transition: filter 0.3s ease;
+/* ============================== */
+/* PÁGINAS + ACCIONES (AJUSTE)   */
+/* ============================== */
+.pages-with-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.book input[type='date']:hover::-webkit-calendar-picker-indicator {
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+.pages-with-actions .pages {
+  margin: 0;
+  line-height: 1.2;
+  flex: 1;
+  white-space: nowrap;
+}
+
+/* ============================== */
+/* MEDIA QUERIES (TIPOGRAFÍA)    */
+/* ============================== */
+@media (min-width: 2000px) {
+  body {
+    font-size: 1.2rem;
+  }
+
+  .container {
+    max-width: 75rem;
+  }
 }
