@@ -8,9 +8,12 @@
 </head>
 <body>
   <div class="container">
-     <div class="header-section">
-    <h1>Seguimiento de Libros</h1>
+
+    <div class="header-section">
+      <h1>Seguimiento de Libros</h1>
     </div>
+
+    <!-- Formulario de entrada de libros -->
     <form id="book-form" class="form-grid">
       <div class="left-side">
         <div class="form-row">
@@ -25,15 +28,29 @@
       <button type="submit" class="submit-btn">Agregar</button>
     </form>
 
+    <!-- Controles de acciones y orden -->
     <div class="icon-buttons">
       <button id="export-btn" title="Exportar libros">📄</button>
+
       <label title="Importar libros" style="cursor: pointer;">📂
         <input type="file" id="import-input" accept=".json" style="display: none;" />
       </label>
-    </div>
-    
 
+      <select id="sort-select" class="sort-select" title="Ordenar libros">
+        <option value="date-asc">Más antiguos primero</option>
+        <option value="date-desc">Más recientes primero</option>
+        <option value="title-asc">Título A → Z</option>
+        <option value="title-desc">Título Z → A</option>
+        <option value="author-asc">Autor A → Z</option>
+        <option value="author-desc">Autor Z → A</option>
+        <option value="pages-asc">Menos páginas primero</option>
+        <option value="pages-desc">Más páginas primero</option>
+      </select>
+    </div>
+
+    <!-- Lista de libros renderizados -->
     <div id="book-list"></div>
+
   </div>
   <script src="script.js"></script>
 </body>
